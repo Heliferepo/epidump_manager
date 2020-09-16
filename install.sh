@@ -3,6 +3,12 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+cat /etc/fedora-release | grep "Fedora release 32"
+if [[ $? -ne 0 ]]; then
+    echo "This script must be run onto Fedora 32"
+    exit 1
+fi
+
 chmod +x epidump_manager.sh
 mv epidump_manager.sh /usr/bin/epidump_manager
 
