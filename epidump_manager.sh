@@ -1,22 +1,23 @@
 #!/bin/sh
 
+ALL=0
+SFML=0
+DEPS=0
+BLIH=0
+EPIMACS=0
+
 show_help() {
-    echo "-a or -all rebuild the Epitech's dump"
-    echo "-s or --rebuild-sfml-csml rebuild the csfml and reinstall sfml with epitech's dump script"
-    echo "-d or --install-dependencies update and install all the packages from epitech's dump"
-    echo "-b or --reinstall-blih reinstall blih with epitech's repo"
-    echo "-e or --reinstall-epitech-emacs to the system with epitech's repo"
-    echo "-h or --help show this text"
+    echo "-a rebuild the Epitech's dump using -a ignore all other flags except -h"
+    echo "-s rebuild the csfml and reinstall sfml with epitech's dump script"
+    echo "-d update and install all the packages from epitech's dump"
+    echo "-b reinstall blih with epitech's repo"
+    echo "-e Instell emacs and epitech emacs to the system with epitech's repo"
+    echo "-h show this text ignore all other flags and exit"
+    echo "Writing epidump_manager -sddbees for example will be counted as epidump_manager -sdbe"
 }
 
 check_for_errors() {
     if [ -z "$1" ]; then
-        show_help
-        exit 1
-    fi
-
-    if [ ! -z "$1" && ! -z "$2" ]; then
-        echo "This script does not support multiple argument because it has been done in less than 2 minutes sorry not sorry"
         show_help
         exit 1
     fi
@@ -148,15 +149,15 @@ dependencies_installer() {
         teams.x86_64)
 
         sudo dnf -y install ${packages_list[@]}
-}
+    }
 
 rebuild_sfml_plus_csfml() {
-        sudo dnf install -y SFML.x86_64 SFML-devel.x86_64
-        if [ ! -d "/usr/include/SFML/" ]; then
-            echo -e "There is two possibilities : \n\t- SFML is not installed in the default path\n\t- SFML is not installed\nAborting..."
-            exit 1
-        fi
-        sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building csfml"
+    sudo dnf install -y SFML.x86_64 SFML-devel.x86_64
+    if [ ! -d "/usr/include/SFML/" ]; then
+        echo -e "There is two possibilities : \n\t- SFML is not installed in the default path\n\t- SFML is not installed\nAborting..."
+        exit 1
+    fi
+    sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building csfml"
 }
 
 blih_installer() {
@@ -187,37 +188,65 @@ reinstall_epitech_emacs() {
     cd .. && rm -rf epitech-emacs
 }
 
-parse_single_argument() {
-    case $1 in
-        -a|--all)
-            rebuild_all;
-            exit 0;;
-        -s|--rebuild-sfml-csfml)
-            rebuild_sfml_plus_csfml;
-            exit 0;;
-        -d|--install-dependencies)
-            dependencies_installer;
-            exit 0;;
-        -b|--reinstall-blih)
-            blih-installer;
-            exit 0;;
-        -e|--reinstall-epitech-emacs)
-            reinstall-epitech-emacs;
-            exit 0;;
-        -h|--help)
-            show_help;
-            exit 0;;
-        *)
-            echo "Did not recognized argument showing help";
-            show_help;
-            exit 1;;
-    esac
+launch() {
+    if [ "$ALL" == 1 ]; then
+        echo "Reinstalling completely epitech dump"
+        rebuild_all
+    fi
+    if [ "$SFML" == 1]; then
+        echo "Rebuilding / Installing SFML + CSFML"
+        rebuild_sfml_plus_csfml
+    fi
+    if [ "$DEPS" == 1 ]; then
+        echo "Installing / Updating dump dependencies"
+        dependencies_installer
+    fi
+    if [ "$BLIH" == 1 ]; then
+        echo "Installing / Reinstalling  blih"
+        blih-installer
+    fi
+    if [ "$EPIMACS" == 1 ]; then
+        echo "Installing / Reinstalling epitech emacs"
+        reinstall-epitech-emacs
+    fi
+}
+
+parse_argument() {
+    while getopts "asdbe:h:" opt; do
+        case "$opt" in
+            a)
+                ALL=1
+                ;;
+            s)
+                SFML=1
+                ;;
+            d)
+                DEPS=1
+                ;;
+            b)
+                BLIH=1
+                ;;
+            e)
+                EPIMACS=1
+                ;;
+            h)
+                show_help;
+                exit 0
+                ;;
+            *)
+                echo "Did not recognized argument showing help";
+                show_help;
+                exit 1
+                ;;
+        esac
+    done
 }
 
 main() {
     cd /tmp
     check_for_errors
-    parse_single_argument
+    parse_argument
+    launch
 }
 
 main
