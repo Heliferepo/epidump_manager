@@ -67,7 +67,7 @@ rebuild_sfml_plus_csfml() {
 
 blih_installer() {
 	curl -LO https://raw.githubusercontent.com/Epitech/dump/master/blih.py
-	if [ ! -f "blih" ]; then
+	if [ ! -f "blih.py" ]; then
 		echo "Could not download blih... Aborting..."
 		exit 1
 	fi
