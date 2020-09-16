@@ -7,17 +7,18 @@ BLIH=0
 EPIMACS=0
 
 show_help() {
-    echo "-a rebuild the Epitech's dump using -a ignore all other flags except -h"
-    echo "-s rebuild the csfml and reinstall sfml with epitech's dump script"
-    echo "-d update and install all the packages from epitech's dump"
-    echo "-b reinstall blih with epitech's repo"
-    echo "-e Instell emacs and epitech emacs to the system with epitech's repo"
-    echo "-h show this text ignore all other flags and exit"
+    echo "-a Rebuild the whole Epitech's dump it ignores every other flags except -h and fails if one flag is false"
+    echo "-s Rebuild the CSFML with Epitech's script and update SFML with dnf"
+    echo "-d Update / Install the packages of Epitech's package list"
+    echo "-b Reinstall blih with Epitech's script"
+    echo "-e Install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script"
+    echo "-h Show the help ignore all other flags and exit"
     echo "Writing epidump_manager -sddbees for example will be counted as epidump_manager -sdbe"
 }
 
 check_for_errors() {
-    if [ -z "$1" ]; then
+    if [ ! -z "$1" ]; then
+        echo "Missing argument"
         show_help
         exit 1
     fi
