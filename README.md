@@ -17,15 +17,15 @@ You are meant to use the command as follow :
 epidump_manager -sbe
 # It rebuilds sfml+csfml, reinstall blih and install epitech emacs
 ```
-It may not support for now opts in differents flags like this :
-```sh
-epidump_manager -s -b -e
-```
 If you write multiple times the flag it will be counted as one :
 ```
 epidump_manager -ssseebbdsb
+#or
+epidump_manager -s -s -s -e -e -b -b -d -s -b
 #Is the same as
 epidump_manager -sedb
+#or
+epidump_manager -s -e -d -b
 ```
 
 To install the epidump_manager :
