@@ -44,112 +44,16 @@ dependencies_installer() {
 	sudo dnf -y install dnf-plugins-core && dnf -y copr enable petersen/stack2 && dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
 	sudo dnf upgrade -y
+	
+	local packages=$(curl https://raw.githubusercontent.com/Epitech/dump/master/install_packages_dump.sh | grep -oPz 'packages_list=\(\K[^\)]+')
 
-	packages_list=(boost-devel.x86_64
-		boost-static.x86_64
-		ca-certificates.noarch
-		clang.x86_64
-		cmake.x86_64
-		CUnit-devel.x86_64
-		curl.x86_64
-		flac-devel.x86_64
-		freetype-devel.x86_64
-		gcc.x86_64
-		gcc-c++.x86_64
-		gdb.x86_64
-		git
-		glibc.x86_64
-		glibc-devel.x86_64
-		glibc-locale-source.x86_64
-		gmp-devel.x86_64
-		ksh.x86_64
-		elfutils-libelf-devel.x86_64
-		libjpeg-turbo-devel.x86_64
-		libvorbis-devel.x86_64
-		SDL2.x86_64
-		SDL2-static.x86_64
-		SDL2-devel.x86_64
-		libX11-devel.x86_64
-		libXext-devel.x86_64
-		ltrace.x86_64
-		make.x86_64
-		nasm.x86_64
-		ncurses.x86_64
-		ncurses-devel.x86_64
-		ncurses-libs.x86_64
-		net-tools.x86_64
-		openal-soft-devel.x86_64
-		python3-numpy.x86_64
-		python3.x86_64
-		rlwrap.x86_64
-		ruby.x86_64
-		strace.x86_64
-		tar.x86_64
-		tcsh.x86_64
-		tmux.x86_64
-		sudo.x86_64
-		tree.x86_64
-		unzip.x86_64
-		valgrind.x86_64
-		vim
-		emacs-nox
-		which.x86_64
-		xcb-util-image.x86_64
-		xcb-util-image-devel.x86_64
-		zip.x86_64
-		zsh.x86_64
-		avr-gcc.x86_64
-		avr-gdb.x86_64
-		qt-devel
-		docker
-		docker-compose
-		java-latest-openjdk
-		java-latest-openjdk-devel
-		boost
-		boost-math
-		boost-graph
-		autoconf
-		automake
-		tcpdump
-		wireshark
-		nodejs
-		python3-virtualenv-api
-		python3-virtualenv
-		emacs-tuareg
-		libvirt
-		libvirt-devel
-		virt-install
-		haskell-platform
-		golang
-		systemd-devel
-		libgudev-devel
-		php.x86_64
-		php-devel.x86_64
-		php-bcmath.x86_64
-		php-cli.x86_64
-		php-gd.x86_64
-		php-mbstring.x86_64
-		php-mysqlnd.x86_64
-		php-pdo.x86_64
-		php-pear.noarch
-		php-json.x86_64
-		php-xml.x86_64
-		php-gettext-gettext.noarch
-		php-phar-io-version.noarch
-		php-theseer-tokenizer.noarch
-		SFML.x86_64
-		SFML-devel.x86_64
-		irrlicht.x86_64
-		irrlicht-devel.x86_64
-		rust.x86_64
-		cargo.x86_64
-		mariadb-server.x86_64
-		x264.x86_64
-		lightspark.x86_64
-		lightspark-mozilla-plugin.x86_64
-		teams.x86_64)
+	if [ -z "$packages" ]; then
+    		echo "Could not get the package list" 2>&1
+    		echo "Please report it to the repo manager by creating an issue" 2>&1
+   		exit 1
+	fi
 
-		sudo dnf -y install ${packages_list[@]}
+	sudo dnf -y install $packages
 }
 
 rebuild_sfml_plus_csfml() {
