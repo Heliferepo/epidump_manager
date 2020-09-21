@@ -16,7 +16,18 @@ show_help() {
     echo -e "\t-h\tdisplay this help and exit"
 }
 
-check_for_errors() {
+check_for_git() {
+    if [ ! -f "/usr/bin/git" ]; then
+        echo "warning: Git not found... Installing git"
+        dnf install -y git-core
+        if [ ! -f "/usr/bin/git" ]; then
+            echo "fatal error: Could not find git nor install it"
+            exit 1
+        fi
+    fi
+}
+
+check_for_basic_invocation_errors() {
     if [[ $EUID -ne 0 ]]; then
         echo "This script must be run as root" 1>&2
         exit 1
@@ -27,16 +38,10 @@ check_for_errors() {
         show_help
         exit 1
     fi
-
-    if [ ! -f "/usr/bin/git" ]; then
-        dnf install -y git
-        if [ ! -f "/usr/bin/git" ]; then
-            echo "Could not find git which is required for most of the commands"
-        fi
-    fi
 }
 
 rebuild_all() {
+    check_for_git
     git clone https://github.com/Epitech/dump
     cd dump
     chmod +x install_packages_dump.sh
@@ -82,6 +87,7 @@ blih_installer() {
 }
 
 reinstall_epitech_emacs() {
+    check_for_git
     dnf install -y emacs-nox
     if [ ! -f "/usr/bin/emacs" ]; then
         echo "Could not install emacs... Aborting..."
@@ -155,7 +161,7 @@ parse_argument() {
 
 main() {
     cd `mktemp -d`  # Create temporary directory and cd to it
-    check_for_errors $@
+    check_for_basic_invocation_errors $@
     parse_argument $@
     launch
 }
