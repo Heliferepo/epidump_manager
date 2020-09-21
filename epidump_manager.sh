@@ -7,29 +7,29 @@ BLIH=0
 EPIMACS=0
 
 show_help() {
-    echo -e "\n-a Rebuild the whole Epitech's dump it ignores every other flags except -h and fails if one flag is false\n"
-    echo -e "\n-s Rebuild the CSFML with Epitech's script and update SFML with dnf\n"
-    echo -e "\n-d Update / Install the packages of Epitech's package list\n"
-    echo -e "\n-b Reinstall blih with Epitech's script\n"
-    echo -e "\n-e Install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script\n"
-    echo -e "\n-h Show the help ignore all other flags and exit\n"
-    echo -e "\nWriting epidump_manager -sddbees for example will be counted as epidump_manager -sdbe\n"
+    echo -e "Usage: epidump_manager [OPTION]...\n"
+    echo -e "\t-a\trebuild the entire Epitech dump. This ignores every other flag (except -h)"
+    echo -e "\t-s\trebuild the CSFML with Epitech's script and update SFML with dnf"
+    echo -e "\t-d\tupdate / install the packages from Epitech's package list"
+    echo -e "\t-b\treinstall blih with Epitech's script"
+    echo -e "\t-e\tinstall Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script"
+    echo -e "\t-h\tdisplay this help and exit"
 }
 
 check_for_errors() {
     if [[ $EUID -ne 0 ]]; then
-        echo "This script must be runned as root" 1>&2
+        echo "This script must be run as root" 1>&2
         exit 1
     fi
 
     if [ -z "$1" ]; then
-        echo "Missing argument"
+        echo "fatal error: no arguments"
         show_help
         exit 1
     fi
 
     if [ ! -f "/usr/bin/git" ]; then
-        sudo dnf install -y git
+        dnf install -y git
         if [ ! -f "/usr/bin/git" ]; then
             echo "Could not find git which is required for most of the commands"
         fi
@@ -40,15 +40,15 @@ rebuild_all() {
     git clone https://github.com/Epitech/dump
     cd dump
     chmod +x install_packages_dump.sh
-    sudo ./install_packages_dump.sh
+    ./install_packages_dump.sh
 }
 
 dependencies_installer() {
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
     bash -c 'echo -e "[teams]\nname=teams\nbaseurl=https://packages.microsoft.com/yumrepos/ms-teams\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/teams.repo'
-    sudo dnf -y install dnf-plugins-core && dnf -y copr enable petersen/stack2 && dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    dnf -y install dnf-plugins-core && dnf -y copr enable petersen/stack2 && dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
-    sudo dnf upgrade -y
+    dnf upgrade -y
 
     local packages=$(curl https://raw.githubusercontent.com/Epitech/dump/master/install_packages_dump.sh | grep -oPz 'packages_list=\(\K[^\)]+')
 
@@ -58,16 +58,16 @@ dependencies_installer() {
         exit 1
     fi
 
-    sudo dnf -y install $packages
+    dnf -y install $packages
 }
 
 rebuild_sfml_plus_csfml() {
-    sudo dnf install -y SFML.x86_64 SFML-devel.x86_64
+    dnf install -y SFML.x86_64 SFML-devel.x86_64
     if [ ! -d "/usr/include/SFML/" ]; then
         echo -e "There is two possibilities : \n\t- SFML is not installed in the default path\n\t- SFML is not installed\nAborting..."
         exit 1
     fi
-    sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building csfml"
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building csfml"
 }
 
 blih_installer() {
@@ -77,12 +77,12 @@ blih_installer() {
         exit 1
     fi
     chmod +x blih.py
-    sudo rm -rf /usr/bin/blih
-    sudo mv blih.py /usr/bin/blih
+    rm -rf /usr/bin/blih
+    mv blih.py /usr/bin/blih
 }
 
 reinstall_epitech_emacs() {
-    sudo dnf install -y emacs-nox
+    dnf install -y emacs-nox
     if [ ! -f "/usr/bin/emacs" ]; then
         echo "Could not install emacs... Aborting..."
         exit 1
@@ -94,7 +94,7 @@ reinstall_epitech_emacs() {
     fi
     cd epitech-emacs
     git checkout 278bb6a630e6474f99028a8ee1a5c763e943d9a3
-    sudo ./INSTALL.sh system
+    ./INSTALL.sh system
     cd .. && rm -rf epitech-emacs
 }
 
