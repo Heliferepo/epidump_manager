@@ -31,12 +31,20 @@ check_for_file_and_install_package_if_not_present() {
 }
 
 check_for_git() {
-    check_for_file_and_install_package_if_not_present git /usr/bin/git git-core
+    check_for_file_and_install_package_if_not_present "Git" /usr/bin/git git-core
 }
 
 check_for_dnf_copr() {
     # The `?` in `python3.?` should make it so that this works for any version of Python 3 installed on the target system
-    check_for_file_and_install_package_if_not_present "dnf copr plugin" "/usr/lib/python3.?/site-packages/dnf-plugins/copr.py" "dnf-command(copr)"
+    check_for_file_and_install_package_if_not_present "DNF copr plugin" /usr/lib/python3.?/site-packages/dnf-plugins/copr.py "dnf-command(copr)"
+}
+
+check_for_SFML() {
+    check_for_file_and_install_package_if_not_present "Development files for SFML" /usr/include/SFML/Main.hpp SFML-devel
+}
+
+check_for_curl() {
+    check_for_file_and_install_package_if_not_present "The Curl utility" /usr/bin/curl curl
 }
 
 check_for_basic_invocation_errors() {
@@ -84,23 +92,21 @@ dependencies_installer() {
 }
 
 rebuild_sfml_plus_csfml() {
-    dnf install -y SFML.x86_64 SFML-devel.x86_64
-    if [ ! -d "/usr/include/SFML/" ]; then
-        echo -e "There is two possibilities : \n\t- SFML is not installed in the default path\n\t- SFML is not installed\nAborting..."
-        exit 1
-    fi
-    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building csfml"
+    check_for_SFML
+    echo "Downloading and executing install script for CSFML..."
+    bash -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building CSFML"
 }
 
 blih_installer() {
+    check_for_curl
+    echo "Downloading blih..."
     curl -LO https://raw.githubusercontent.com/Epitech/dump/master/blih.py
     if [ ! -f "blih.py" ]; then
         echo "Could not download blih... Aborting..."
         exit 1
     fi
-    chmod +x blih.py
-    rm -rf /usr/bin/blih
-    mv blih.py /usr/bin/blih
+    echo "Installing blih..."
+    install blih.py /usr/bin/blih
 }
 
 reinstall_epitech_emacs() {
@@ -116,7 +122,7 @@ reinstall_epitech_emacs() {
         exit 1
     fi
     cd epitech-emacs
-    git checkout 278bb6a630e6474f99028a8ee1a5c763e943d9a3
+    git checkout 278bb6a630e6474f99028a8ee1a5c763e943d9a3   # TODO: Document why we do this
     ./INSTALL.sh system
     cd .. && rm -rf epitech-emacs
 }
