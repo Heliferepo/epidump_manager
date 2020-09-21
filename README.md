@@ -1,10 +1,10 @@
 # epidump_manager
-A simple manager linked to Epitech/dump repo to fix anytime in one command anything that is provided in the dump repository
+A simple manager linked to the Epitech/dump repository to handle most dump-related problems in one command
 
-This Dump manager provides thoses commands :
+This dump manager provides thoses commands :
 
 ```
-  -a Rebuild the whole Epitech's dump it ignores every other flags except -h and fails if one flag is false 
+  -a Rebuild the whole Epitech's dump it ignores every other flags except -h and fails if one flag is false
   -s Rebuild the CSFML with Epitech's script and update SFML with dnf
   -d Update / Install the packages of Epitech's package list
   -b Reinstall blih with Epitech's script
@@ -17,16 +17,6 @@ You are meant to use the command as follow :
 epidump_manager -sbe
 # It rebuilds sfml+csfml, reinstall blih and install epitech emacs
 ```
-If you write multiple times the flag it will be counted as one :
-```
-epidump_manager -ssseebbdsb
-#or
-epidump_manager -s -s -s -e -e -b -b -d -s -b
-#Is the same as
-epidump_manager -sedb
-#or
-epidump_manager -s -e -d -b
-```
 
 To install the epidump_manager :
 ```sh
@@ -36,4 +26,4 @@ chmod +x install.sh
 sudo ./install.sh
 ```
 
-If you notice something is missing in the package manager or you found a bug please open an issue
+If you notice something is missing in the package manager, or you find a bug, please open an issue
