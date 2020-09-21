@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 ALL=0
 SFML=0
@@ -37,7 +37,7 @@ check_for_errors() {
 }
 
 rebuild_all() {
-    git clone https://github.com/Epitech/dump dump
+    git clone https://github.com/Epitech/dump
     cd dump
     chmod +x install_packages_dump.sh
     sudo ./install_packages_dump.sh
@@ -45,7 +45,7 @@ rebuild_all() {
 
 dependencies_installer() {
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
-    sh -c 'echo -e "[teams]\nname=teams\nbaseurl=https://packages.microsoft.com/yumrepos/ms-teams\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/teams.repo'
+    bash -c 'echo -e "[teams]\nname=teams\nbaseurl=https://packages.microsoft.com/yumrepos/ms-teams\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/teams.repo'
     sudo dnf -y install dnf-plugins-core && dnf -y copr enable petersen/stack2 && dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
     sudo dnf upgrade -y
@@ -67,7 +67,7 @@ rebuild_sfml_plus_csfml() {
         echo -e "There is two possibilities : \n\t- SFML is not installed in the default path\n\t- SFML is not installed\nAborting..."
         exit 1
     fi
-    sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building csfml"
+    sudo bash -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building csfml"
 }
 
 blih_installer() {
@@ -154,7 +154,7 @@ parse_argument() {
 }
 
 main() {
-    cd /tmp
+    cd `mktemp -d`  # Create temporary directory and cd to it
     check_for_errors $@
     parse_argument $@
     launch
