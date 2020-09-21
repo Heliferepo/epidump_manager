@@ -42,8 +42,8 @@ check_for_basic_invocation_errors() {
 
 rebuild_all() {
     check_for_git
-    git clone https://github.com/Epitech/dump
-    cd dump
+    git clone https://github.com/Epitech/dump epitech-dump
+    cd epitech-dump
     chmod +x install_packages_dump.sh
     ./install_packages_dump.sh
 }
