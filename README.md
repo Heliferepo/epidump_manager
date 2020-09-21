@@ -4,12 +4,12 @@ A simple manager linked to the Epitech/dump repository to handle most dump-relat
 This dump manager provides thoses commands :
 
 ```
-  -a Rebuild the whole Epitech's dump it ignores every other flags except -h and fails if one flag is false
-  -s Rebuild the CSFML with Epitech's script and update SFML with dnf
-  -d Update / Install the packages of Epitech's package list
-  -b Reinstall blih with Epitech's script
-  -e Install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script
-  -h Show the help ignore all other flags and exit
+        -a      rebuild the entire Epitech dump. This ignores every other flag (except -h)
+        -s      rebuild the CSFML with Epitech's script and update SFML with dnf
+        -d      update / install the packages from Epitech's package list
+        -b      reinstall blih with Epitech's script
+        -e      install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script
+        -h      display this help and exit
 ```
 
 You are meant to use the command as follow :

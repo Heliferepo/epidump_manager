@@ -55,6 +55,7 @@ check_for_basic_invocation_errors() {
     fi
 }
 
+# Implements -a
 rebuild_all() {
     check_for_git
 
@@ -67,6 +68,7 @@ rebuild_all() {
     cd ..
 }
 
+# Implements -d
 dependencies_installer() {
     check_for_dnf_copr
 
@@ -95,6 +97,7 @@ dependencies_installer() {
     dnf -y install $packages
 }
 
+# Implements -s
 rebuild_sfml_plus_csfml() {
     check_for_SFML
 
@@ -102,6 +105,7 @@ rebuild_sfml_plus_csfml() {
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building CSFML"
 }
 
+# Implements -b
 blih_installer() {
     check_for_curl
 
@@ -116,6 +120,7 @@ blih_installer() {
     install blih.py /usr/bin/blih
 }
 
+# Implements -e
 reinstall_epitech_emacs() {
     check_for_git
 
@@ -203,8 +208,8 @@ parse_argument() {
 main() {
     cd `mktemp -d`  # Create temporary directory and cd to it
     check_for_basic_invocation_errors $@
-    parse_argument $@
-    launch
+    parse_argument $@ # Process command line
+    launch  # Do stuff based on the processed command line options
 }
 
 main "$@"
