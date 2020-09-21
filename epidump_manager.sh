@@ -9,7 +9,7 @@ EPIMACS=0
 show_help() {
     echo -e "Usage: epidump_manager [OPTION]...\n"
     echo -e "\t-a\trebuild the entire Epitech dump. This ignores every other flag (except -h)"
-    echo -e "\t-s\trebuild the CSFML with Epitech's script and update SFML with dnf"
+    echo -e "\t-s\rebuild the CSFML with Epitech's script"
     echo -e "\t-d\tupdate / install the packages from Epitech's package list"
     echo -e "\t-b\treinstall blih with Epitech's script"
     echo -e "\t-e\tinstall Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script"
