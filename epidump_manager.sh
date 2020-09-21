@@ -16,15 +16,27 @@ show_help() {
     echo -e "\t-h\tdisplay this help and exit"
 }
 
-check_for_git() {
-    if [ ! -f "/usr/bin/git" ]; then
-        echo "warning: Git not found... Installing git"
-        dnf install -y git-core
-        if [ ! -f "/usr/bin/git" ]; then
-            echo "fatal error: Could not find git nor install it"
+# $1 is a representative name of whatever you want to check for to make it clearer to the user what we're doing when installing the package to get the file
+# $2 is the file to check for
+# $3 is the package to install to get the file
+check_for_file_and_install_package_if_not_present() {
+    if [ ! -f "$2" ]; then
+        echo "warning: $1 not found... Installing $1..."
+        dnf install -y "$3"
+        if [ ! -f "$2"]; then
+            echo "fatal error: Could not find $1 nor install it"
             exit 1
         fi
     fi
+}
+
+check_for_git() {
+    check_for_file_and_install_package_if_not_present git /usr/bin/git git-core
+}
+
+check_for_dnf_copr() {
+    # The `?` in `python3.?` should make it so that this works for any version of Python 3 installed on the target system
+    check_for_file_and_install_package_if_not_present "dnf copr plugin" "/usr/lib/python3.?/site-packages/dnf-plugins/copr.py" "dnf-command(copr)"
 }
 
 check_for_basic_invocation_errors() {
@@ -46,20 +58,28 @@ rebuild_all() {
 }
 
 dependencies_installer() {
+    check_for_dnf_copr
+    echo "Importing RPM keys from Microsoft..."
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
+    echo "Adding Microsoft Teams repository to repositories..."
     bash -c 'echo -e "[teams]\nname=teams\nbaseurl=https://packages.microsoft.com/yumrepos/ms-teams\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/teams.repo'
-    dnf -y install dnf-plugins-core && dnf -y copr enable petersen/stack2 && dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
+    echo "Enabling petersen/stack2 copr and installing rpmfusion..."
+    # Use --enable-plugin to enable copr plugin in case it was disabled
+    dnf -y --enable-plugin=copr copr enable petersen/stack2 && dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+
+    echo "Updating all packages to the latest available version (i.e. doing dnf upgrade)..."
     dnf upgrade -y
 
     local packages=$(curl https://raw.githubusercontent.com/Epitech/dump/master/install_packages_dump.sh | grep -oPz 'packages_list=\(\K[^\)]+')
 
     if [ -z "$packages" ]; then
         echo "Could not get the package list" 2>&1
-        echo "Please report it to the repo manager by creating an issue" 2>&1
+        echo "Please report this to the repo manager by creating an issue" 2>&1
         exit 1
     fi
 
+    echo "Installing packages from Epitech dump package list..."
     dnf -y install $packages
 }
 
