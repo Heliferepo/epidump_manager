@@ -7,16 +7,21 @@ BLIH=0
 EPIMACS=0
 
 show_help() {
-    echo "-a Rebuild the whole Epitech's dump it ignores every other flags except -h and fails if one flag is false"
-    echo "-s Rebuild the CSFML with Epitech's script and update SFML with dnf"
-    echo "-d Update / Install the packages of Epitech's package list"
-    echo "-b Reinstall blih with Epitech's script"
-    echo "-e Install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script"
-    echo "-h Show the help ignore all other flags and exit"
-    echo "Writing epidump_manager -sddbees for example will be counted as epidump_manager -sdbe"
+    echo -e "\n-a Rebuild the whole Epitech's dump it ignores every other flags except -h and fails if one flag is false\n"
+    echo -e "\n-s Rebuild the CSFML with Epitech's script and update SFML with dnf\n"
+    echo -e "\n-d Update / Install the packages of Epitech's package list\n"
+    echo -e "\n-b Reinstall blih with Epitech's script\n"
+    echo -e "\n-e Install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script\n"
+    echo -e "\n-h Show the help ignore all other flags and exit\n"
+    echo -e "\nWriting epidump_manager -sddbees for example will be counted as epidump_manager -sdbe\n"
 }
 
 check_for_errors() {
+    if [[ $EUID -ne 0 ]]; then
+        echo "This script must be runned as root" 1>&2
+        exit 1
+    fi
+
     if [ -z "$1" ]; then
         echo "Missing argument"
         show_help
@@ -77,7 +82,7 @@ blih_installer() {
 }
 
 reinstall_epitech_emacs() {
-    sudo dnf install -y emacs
+    sudo dnf install -y emacs-nox
     if [ ! -f "/usr/bin/emacs" ]; then
         echo "Could not install emacs... Aborting..."
         exit 1
@@ -109,16 +114,16 @@ launch() {
     fi
     if [ "$BLIH" == 1 ]; then
         echo "Installing / Reinstalling  blih"
-        blih-installer
+        blih_installer
     fi
     if [ "$EPIMACS" == 1 ]; then
         echo "Installing / Reinstalling epitech emacs"
-        reinstall-epitech-emacs
+        reinstall_epitech_emacs
     fi
 }
 
 parse_argument() {
-    while getopts "asdbe:h:" opt; do
+    while getopts "asdbeh" opt; do
         case "$opt" in
             a)
                 ALL=1
