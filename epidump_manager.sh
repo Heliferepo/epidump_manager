@@ -49,6 +49,7 @@ rebuild_all() {
     cd ${epitech_dump_directory}
     chmod +x install_packages_dump.sh
     ./install_packages_dump.sh
+    cd ..
 }
 
 dependencies_installer() {
