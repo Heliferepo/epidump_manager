@@ -32,19 +32,12 @@ check_for_basic_invocation_errors() {
         echo "This script must be run as root" 1>&2
         exit 1
     fi
-
-    # TODO: Idk why we do this or why we do it in such an elementary way but I don't want to mess with this myself, it might break something - Gabriel
-    if [ -z "$1" ]; then
-        echo "fatal error: at least one option is required"
-        show_help
-        exit 1
-    fi
 }
 
 rebuild_all() {
     check_for_git
     local epitech_dump_directory=epitech-dump
-    echo "Cloning Epitech's dump repository to ${PWD}/${epitech_dump_directory}"
+    echo "Cloning Epitech's dump repository to ${PWD}/${epitech_dump_directory}..."
     git clone https://github.com/Epitech/dump ${epitech_dump_directory}
     cd ${epitech_dump_directory}
     chmod +x install_packages_dump.sh
