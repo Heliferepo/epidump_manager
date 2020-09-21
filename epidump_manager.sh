@@ -23,6 +23,7 @@ check_for_file_and_install_package_if_not_present() {
     if [ ! -f "$2" ]; then
         echo "warning: $1 not found... Installing $1..."
         dnf install -y "$3"
+
         if [ ! -f "$2"]; then
             echo "fatal error: Could not find $1 nor install it"
             exit 1
@@ -56,8 +57,9 @@ check_for_basic_invocation_errors() {
 
 rebuild_all() {
     check_for_git
-    local epitech_dump_directory=epitech-dump
+
     echo "Cloning Epitech's dump repository to ${PWD}/${epitech_dump_directory}..."
+    local epitech_dump_directory=epitech-dump
     git clone https://github.com/Epitech/dump ${epitech_dump_directory}
     cd ${epitech_dump_directory}
     chmod +x install_packages_dump.sh
@@ -67,8 +69,10 @@ rebuild_all() {
 
 dependencies_installer() {
     check_for_dnf_copr
+
     echo "Importing RPM keys from Microsoft..."
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
+
     echo "Adding Microsoft Teams repository to repositories..."
     bash -c 'echo -e "[teams]\nname=teams\nbaseurl=https://packages.microsoft.com/yumrepos/ms-teams\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/teams.repo'
 
@@ -93,29 +97,36 @@ dependencies_installer() {
 
 rebuild_sfml_plus_csfml() {
     check_for_SFML
+
     echo "Downloading and executing install script for CSFML..."
     bash -c "$(curl -fsSL https://raw.githubusercontent.com/Epitech/dump/master/build_csfml.sh)" || echo "There has been an error while building CSFML"
 }
 
 blih_installer() {
     check_for_curl
+
     echo "Downloading blih..."
     curl -LO https://raw.githubusercontent.com/Epitech/dump/master/blih.py
     if [ ! -f "blih.py" ]; then
         echo "Could not download blih... Aborting..."
         exit 1
     fi
+
     echo "Installing blih..."
     install blih.py /usr/bin/blih
 }
 
 reinstall_epitech_emacs() {
     check_for_git
-    dnf install -y emacs-nox
+
+    echo "Ensuring /usr/bin/emacs has no X support..."
+    dnf reinstall -y emacs-nox    # Just do it like this to be sure /usr/bin/emacs doesn't have X (the default emacs package includes X support, but I believe if you install emacs-nox it will overwrite it)
     if [ ! -f "/usr/bin/emacs" ]; then
         echo "Could not install emacs... Aborting..."
         exit 1
     fi
+
+    echo "Cloning Epitech emacs repo..."
     git clone https://github.com/Epitech/epitech-emacs.git
     if [ ! -d "epitech-emacs" ]; then
         echo "Could not download epitech-emacs... Aborting..."
@@ -123,7 +134,10 @@ reinstall_epitech_emacs() {
     fi
     cd epitech-emacs
     git checkout 278bb6a630e6474f99028a8ee1a5c763e943d9a3   # TODO: Document why we do this
+
+    echo "Running Epitech emacs install script..."
     ./INSTALL.sh system
+
     cd .. && rm -rf epitech-emacs
 }
 
@@ -133,18 +147,22 @@ launch() {
         rebuild_all
         exit 0
     fi
+
     if [ "$SFML" == 1 ]; then
         echo "Rebuilding / Installing SFML + CSFML"
         rebuild_sfml_plus_csfml
     fi
+
     if [ "$DEPS" == 1 ]; then
         echo "Installing / Updating dump dependencies"
         dependencies_installer
     fi
+
     if [ "$BLIH" == 1 ]; then
         echo "Installing / Reinstalling  blih"
         blih_installer
     fi
+
     if [ "$EPIMACS" == 1 ]; then
         echo "Installing / Reinstalling epitech emacs"
         reinstall_epitech_emacs
