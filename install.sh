@@ -12,4 +12,4 @@ fi
 chmod +x epidump_manager.sh
 mv epidump_manager.sh /usr/bin/epidump_manager
 
-echo -e "Epidump manager installed type epidump_manager --help to know how to use it\n"
+echo -e "Epidump manager installed type epidump_manager -h to know how to use it\n"
