@@ -64,6 +64,8 @@ rebuild_all() {
     git clone https://github.com/Epitech/dump ${epitech_dump_directory}
     cd ${epitech_dump_directory}
     chmod +x install_packages_dump.sh
+
+    echo "Executing Epitech install_packages_dump.sh script..."
     ./install_packages_dump.sh
     cd ..
 }
