@@ -4,11 +4,12 @@ A simple manager linked to the Epitech/dump repository to handle most dump-relat
 This dump manager provides thoses commands :
 
 ```
-        -a      rebuild the entire Epitech dump. This ignores every other flag (except -h)
+        -a      rebuild the entire Epitech dump. This ignores every other flag (except -h and -z)
         -s      rebuild the CSFML with Epitech's script
         -d      update / install the packages from Epitech's package list
         -b      reinstall blih with Epitech's script
         -e      install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script
+        -z      Install zsh with ohymzsh
         -h      display this help and exit
 ```
 

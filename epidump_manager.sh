@@ -5,14 +5,16 @@ SFML=0
 DEPS=0
 BLIH=0
 EPIMACS=0
+ZSHELL=0
 
 show_help() {
     echo -e "Usage: epidump_manager [OPTION]...\n"
-    echo -e "\t-a\trebuild the entire Epitech dump. This ignores every other flag (except -h)"
+    echo -e "\t-a\trebuild the entire Epitech dump. This ignores every other flag (except -h and -z)"
     echo -e "\t-s\trebuild the CSFML with Epitech's script"
     echo -e "\t-d\tupdate / install the packages from Epitech's package list"
     echo -e "\t-b\treinstall blih with Epitech's script"
     echo -e "\t-e\tinstall Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script"
+    echo -e "\t-z\tInstall zsh with ohmyzsh"
     echo -e "\t-h\tdisplay this help and exit"
 }
 
@@ -46,6 +48,18 @@ check_for_SFML() {
 
 check_for_curl() {
     check_for_file_and_install_package_if_not_present "The Curl utility" /usr/bin/curl curl
+}
+
+check_for_zsh() {
+    check_for_file_and_install_package_if_not_present "The Zsh utility" /usr/bin/zsh zsh
+}
+
+check_for_wget() {
+    check_for_file_and_install_package_if_not_present "The wget utility" /usr/bin/wget wget
+}
+
+check_for_chsh() {
+    check_for_file_and_install_package_if_not_present "The chsh utility" /usr/bin/chsh util-linux-user
 }
 
 check_for_basic_invocation_errors() {
@@ -149,6 +163,19 @@ reinstall_epitech_emacs() {
     cd .. && rm -rf epitech-emacs
 }
 
+#Implements -z
+zsh_installer() {
+    check_for_zsh
+    check_for_wget
+    check_for_chsh
+
+    echo "Download ohmyzsh + installation"
+    wget --no-check-certificate http://install.ohmyz.sh -O - | sh
+
+    echo "Switching to full zsh for next reboot"
+    chsh -s /usr/bin/zsh
+}
+
 launch() {
     if [ "$ALL" == 1 ]; then
         echo "Reinstalling completely epitech dump"
@@ -175,6 +202,11 @@ launch() {
         echo "Installing / Reinstalling epitech emacs"
         reinstall_epitech_emacs
     fi
+
+    if [ "$ZSHELL" == 1 ]; then
+        echo "Installing / Reinstalling zsh"
+        zsh_installer
+    fi
 }
 
 parse_argument() {
@@ -194,6 +226,9 @@ parse_argument() {
                 ;;
             e)
                 EPIMACS=1
+                ;;
+            z)
+                ZSHELL=1
                 ;;
             h)
                 show_help;
