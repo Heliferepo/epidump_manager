@@ -9,7 +9,8 @@ This dump manager provides thoses commands :
         -d      update / install the packages from Epitech's package list
         -b      reinstall blih with Epitech's script
         -e      install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script
-        -z      Install zsh with ohymzsh
+        Optional  (not invoked by -a) : 
+                -z      Install zsh with ohymzsh
         -h      display this help and exit
 ```
 
