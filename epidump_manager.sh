@@ -140,7 +140,9 @@ reinstall_epitech_emacs() {
         exit 1
     fi
     cd epitech-emacs
-    git checkout 278bb6a630e6474f99028a8ee1a5c763e943d9a3   # TODO: Document why we do this
+
+    # Checkout latest stable commit (ugly hack but it works at least)
+    git checkout 278bb6a630e6474f99028a8ee1a5c763e943d9a3
 
     echo "Running Epitech emacs install script..."
     ./INSTALL.sh system
