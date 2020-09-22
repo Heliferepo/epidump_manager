@@ -12,5 +12,6 @@ if [[ "xFedora release 32 (Thirty Two)" != "x$(cat /etc/fedora-release)" ]]; the
 fi
 
 install epidump_manager.sh /usr/bin/epidump_manager
+cp epidump_manager.8.gz /usr/share/\man/man8
 
-echo -e "The epidump manager was successfully installed. Type \`epidump_manager -h\` to learn how to use it\n"
+echo -e "The epidump manager was successfully installed. Type \`man epidump_manager\` to learn how to use it\n"
