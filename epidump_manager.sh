@@ -47,19 +47,19 @@ check_for_SFML() {
 }
 
 check_for_curl() {
-    check_for_file_and_install_package_if_not_present "The Curl utility" /usr/bin/curl curl
+    check_for_file_and_install_package_if_not_present "Curl" /usr/bin/curl curl
 }
 
 check_for_zsh() {
-    check_for_file_and_install_package_if_not_present "The Zsh utility" /usr/bin/zsh zsh
+    check_for_file_and_install_package_if_not_present "Z shell" /usr/bin/zsh zsh
 }
 
 check_for_wget() {
-    check_for_file_and_install_package_if_not_present "The wget utility" /usr/bin/wget wget
+    check_for_file_and_install_package_if_not_present "wget" /usr/bin/wget wget
 }
 
 check_for_chsh() {
-    check_for_file_and_install_package_if_not_present "The chsh utility" /usr/bin/chsh util-linux-user
+    check_for_file_and_install_package_if_not_present "chsh" /usr/bin/chsh util-linux-user
 }
 
 check_for_emacs() {
