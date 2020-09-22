@@ -71,9 +71,9 @@ get_user_install_zsh() {
     echo "Please give the username of the user you want to install to : "
     read addtouser
         
-    if [ addtouser == "root" ]; then
+    if [ "$addtouser" == "root" ]; then
         addtouser = "/root"
-    elif [ -d == "/home/$addtouser" ]; then
+    elif [ -d "/home/$addtouser" ]; then
         addtouser = "/home/$addtouser"
     else
         echo "Could not find /home/$addtouser"
