@@ -211,7 +211,7 @@ launch() {
 }
 
 parse_argument() {
-    while getopts "asdbeh" opt; do
+    while getopts "asdbezh" opt; do
         case "$opt" in
             a)
                 ALL=1
