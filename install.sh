@@ -1,15 +1,16 @@
+#!/usr/bin/env bash
+
 if [[ $EUID -ne 0 ]]; then
     echo "This script must be run as root" 1>&2
     exit 1
 fi
 
-cat /etc/fedora-release | grep "Fedora release 32"
-if [[ $? -ne 0 ]]; then
+echo "Checking for Fedora 32..."
+if [[ "xFedora release 32 (Thirty Two)" != "x$(cat /etc/fedora-release)" ]]; then   # Check if /etc/fedora-release contains the text stored in it in Fedora 32. The x is to avoid an initial `-` character in /etc/fedora-release being interpreted as an option to test.
     echo "This script must be run onto Fedora 32"
     exit 1
 fi
 
-chmod +x epidump_manager.sh
-mv epidump_manager.sh /usr/bin/epidump_manager
+install epidump_manager.sh /usr/bin/epidump_manager
 
-echo -e "Epidump manager installed type epidump_manager -h to know how to use it\n"
+echo -e "The epidump manager was successfully installed. Type \`epidump_manager -h\` to learn how to use it\n"
