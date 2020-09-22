@@ -72,8 +72,10 @@ get_user_install_zsh() {
     read addtouser
         
     if [ addtouser == "root" ] 
-        addtouser == "/root"
-    elif [ ! -d == "/home/$addtouser" ]
+        addtouser = "/root"
+    elif [ -d == "/home/$addtouser" ]
+        addtouser = "/home/$addtouser"
+    else
         echo "Could not find /home/$addtouser"
         exit 1
     fi
@@ -201,7 +203,8 @@ zsh_installer() {
     echo "Set default shell to zsh"
     sudo adduser -D -s /bin/zsh
     
-    cp /usr/share/oh-my-zsh/zshrc /home/$addtouser/.zshrc
+    echo "Giving a zshrc to specific user"
+    cp /usr/share/oh-my-zsh/zshrc $addtouser/.zshrc
 }
 
 launch() { 
