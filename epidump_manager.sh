@@ -63,7 +63,7 @@ check_for_chsh() {
 }
 
 check_for_emacs() {
-    check_for_file_and_install_package_if_not_present "emacs-nox" /usr/bin/emacs-nox emacs-nox
+    check_for_file_and_install_package_if_not_present "GNU Emacs without X support" /usr/bin/emacs-nox emacs-nox
 }
 
 check_for_basic_invocation_errors() {
