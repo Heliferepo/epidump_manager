@@ -62,6 +62,10 @@ check_for_chsh() {
     check_for_file_and_install_package_if_not_present "The chsh utility" /usr/bin/chsh util-linux-user
 }
 
+check_for_emacs() {
+    check_for_file_and_install_package_if_not_present "GNU Emacs without X support" /usr/bin/emacs-nox emacs-nox
+}
+
 check_for_basic_invocation_errors() {
     if [[ $EUID -ne 0 ]]; then
         echo "This script must be run as root" 1>&2
@@ -138,13 +142,7 @@ blih_installer() {
 # Implements -e
 reinstall_epitech_emacs() {
     check_for_git
-
-    echo "Ensuring /usr/bin/emacs has no X support..."
-    dnf reinstall -y emacs-nox    # Just do it like this to be sure /usr/bin/emacs doesn't have X (the default emacs package includes X support, but I believe if you install emacs-nox it will overwrite it)
-    if [ ! -f "/usr/bin/emacs" ]; then
-        echo "Could not install emacs... Aborting..."
-        exit 1
-    fi
+    check_for_emacs
 
     echo "Cloning Epitech emacs repo..."
     git clone https://github.com/Epitech/epitech-emacs.git
