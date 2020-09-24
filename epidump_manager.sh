@@ -120,7 +120,7 @@ dependencies_installer() {
     echo "Updating all packages to the latest available version (i.e. doing dnf upgrade)..."
     dnf upgrade -y
 
-    local packages=$(curl https://raw.githubusercontent.com/Epitech/dump/master/install_packages_dump.sh | grep -oPz 'packages_list=\(\K[^\)]+')
+    local packages=$(curl https://raw.githubusercontent.com/Epitech/dump/master/install_packages_dump.sh | grep -oPz 'packages_list=\(\K[^\)]+' | sed 's/x264.x96_64//g'; sed 's/lightspark.x86_64//g'; sed 's/lightspark-mozilla-plugin.x86_64//g')
 
     if [ -z "$packages" ]; then
         echo "Could not get the package list" 2>&1
