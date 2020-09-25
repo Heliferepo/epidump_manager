@@ -27,7 +27,7 @@ check_for_file_and_install_package_if_not_present() {
         echo "warning: $1 not found... Installing $1..."
         dnf install -y "$3"
 
-        if [ ! -f "$2"]; then
+        if [ ! -f "$2" ]; then
             echo "fatal error: Could not find $1 nor install it"
             exit 1
         fi
