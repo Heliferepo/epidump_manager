@@ -89,6 +89,14 @@ check_for_basic_invocation_errors() {
     fi
 }
 
+enabling_rpm_fusion() {
+    sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
+    
+    if [ $? -ne 0 ]; then
+        echo "Could not enable rpm fusion"
+    fi
+}
+
 # Implements -a
 rebuild_all() {
     check_for_git
@@ -107,6 +115,7 @@ rebuild_all() {
 # Implements -d
 dependencies_installer() {
     check_for_dnf_copr
+    enabling_rpm_fusion
 
     echo "Importing RPM keys from Microsoft..."
     rpm --import https://packages.microsoft.com/keys/microsoft.asc
