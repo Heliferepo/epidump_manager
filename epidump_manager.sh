@@ -93,6 +93,7 @@ check_for_basic_invocation_errors() {
 }
 
 enabling_rpm_fusion() {
+    echo "Enabling rpm fusion free release and non free release"
     sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
     if [ $? -ne 0 ]; then
@@ -125,9 +126,6 @@ dependencies_installer() {
 
     echo "Adding Microsoft Teams repository to repositories..."
     bash -c 'echo -e "[teams]\nname=teams\nbaseurl=https://packages.microsoft.com/yumrepos/ms-teams\nenabled=1\ngpgcheck=1\ngpgkey=https://packages.microsoft.com/keys/microsoft.asc" > /etc/yum.repos.d/teams.repo'
-
-    echo "Enabling petersen/stack2 copr and installing rpmfusion..."
-    dnf -y copr enable petersen/stack2 && dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
 
     echo "Updating all packages to the latest available version (i.e. doing dnf upgrade)..."
     dnf upgrade -y
