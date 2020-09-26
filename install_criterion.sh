@@ -17,14 +17,14 @@ rm -fr $DIR
 wget $URL/$TARBALL
 if [ $? != 0 ]; then
     echo "failled, exiting" 1>&2
-    exit;
+    exit 1
 fi
 
 echo -e "\nUntaring $TARBALL"
 tar xjf $TARBALL
 if [ $? != 0 ]; then
     echo "failled, exiting" 1>&2
-    exit;
+    exit 1
 fi
 
 echo "creating custom ld.conf"
