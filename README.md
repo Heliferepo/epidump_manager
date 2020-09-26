@@ -11,7 +11,7 @@ This dump manager provides thoses commands :
         -e      install Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script
         Optional  (not invoked by -a) :
                 -z      Install zsh with ohymzsh
-                -a      Install Criterion
+                -c      Install Criterion
         -h      display this help and exit
 ```
 
