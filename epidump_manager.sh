@@ -6,6 +6,7 @@ DEPS=0
 BLIH=0
 EPIMACS=0
 ZSHELL=0
+CRITERION=0
 addtouser=""
 
 show_help() {
@@ -15,7 +16,9 @@ show_help() {
     echo -e "\t-d\tupdate / install the packages from Epitech's package list"
     echo -e "\t-b\treinstall blih with Epitech's script"
     echo -e "\t-e\tinstall Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script"
-    echo -e "\t-z\tInstall zsh with ohmyzsh"
+    echo -e "\tOptional (not invoked by -a) : "
+    echo -e "\t\t-z\tInstall zsh with ohmyzsh"
+    echo -e "\t\t-c\tInstall criterion"
     echo -e "\t-h\tdisplay this help and exit"
 }
 
@@ -70,7 +73,7 @@ check_for_emacs() {
 get_user_install_zsh() {
     echo "Please give the username of the user you want to install to : "
     read addtouser
-        
+
     if [ "$addtouser" == "root" ]; then
         addtouser = "/root"
     elif [ -d "/home/$addtouser" ]; then
@@ -80,7 +83,7 @@ get_user_install_zsh() {
         exit 1
     fi
 }
-        
+
 
 check_for_basic_invocation_errors() {
     if [[ $EUID -ne 0 ]]; then
@@ -91,7 +94,7 @@ check_for_basic_invocation_errors() {
 
 enabling_rpm_fusion() {
     sudo dnf install https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
-    
+
     if [ $? -ne 0 ]; then
         echo "Could not enable rpm fusion"
     fi
@@ -195,39 +198,39 @@ zsh_installer() {
 
     echo "Download ohmyzsh + installation"
     sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" || echo "There has been an error while download ohmyzsh" 1>&2
-    
+
     echo "Copy zsh files to /usr/share for all user access"
     mv /root/.oh-my-zsh /usr/share/oh-my-zsh
-    
+
     echo "Move into the dir and copy the zshrc template to zshrc (which will be the default for users)"
     cd /usr/share/oh-my-zsh/
     cp templates/zshrc.zsh-template zshrc
-    
+
     echo "Nab the patch file from MarcinWieczorek's AUR Package and apply to the zshrc file"
     wget https://aur.archlinux.org/cgit/aur.git/plain/0001-zshrc.patch\?h\=oh-my-zsh-git -O zshrc.patch && patch -p1 < zshrc.patch
-    
+
     echo "Create hard link to the zshrc file so it creates an actual independent copy on new users"
     sudo ln /usr/share/oh-my-zsh/zshrc /etc/skel/.zshrc
-    
+
     echo "Set default shell to zsh"
     sudo adduser -D -s /bin/zsh
-    
+
     echo "Giving a zshrc to specific user"
     cp /usr/share/oh-my-zsh/zshrc $addtouser/.zshrc
 }
 
-launch() { 
+launch() {
     if [ "$ALL" == 1 ]; then
         echo "Reinstalling completely epitech dump"
         rebuild_all
         exit 0
     fi
-    
+
     if [ "$ZSHELL" == 1 ]; then
         echo "Installing / Reinstalling zsh"
         zsh_installer
     fi
-    
+
     if [ "$SFML" == 1 ]; then
         echo "Rebuilding / Installing SFML + CSFML"
         rebuild_sfml_plus_csfml
@@ -243,6 +246,10 @@ launch() {
         blih_installer
     fi
 
+    if [ "$CRITERION" == 1 ]; then
+        echo "Installing Criterion"
+    fi
+
     if [ "$EPIMACS" == 1 ]; then
         echo "Installing / Reinstalling epitech emacs"
         reinstall_epitech_emacs
@@ -250,7 +257,7 @@ launch() {
 }
 
 parse_argument() {
-    while getopts "asdbezh" opt; do
+    while getopts "asdbeczh" opt; do
         case "$opt" in
             a)
                 ALL=1
@@ -266,6 +273,9 @@ parse_argument() {
                 ;;
             e)
                 EPIMACS=1
+                ;;
+            c)
+                CRITERION=1
                 ;;
             z)
                 ZSHELL=1
