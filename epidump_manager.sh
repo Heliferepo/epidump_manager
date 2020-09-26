@@ -197,7 +197,7 @@ zsh_installer() {
     check_for_chsh
 
     echo "Download ohmyzsh + installation"
-    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" || echo "There has been an error while download ohmyzsh" 1>&2
+    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" || echo "There has been an error while downloading ohmyzsh" 1>&2
 
     echo "Copy zsh files to /usr/share for all user access"
     mv /root/.oh-my-zsh /usr/share/oh-my-zsh
@@ -217,6 +217,10 @@ zsh_installer() {
 
     echo "Giving a zshrc to specific user"
     cp /usr/share/oh-my-zsh/zshrc $addtouser/.zshrc
+}
+
+criterion_installer() {
+    sh -c "$(curl https://raw.githubusercontent.com/Heliferepo/epidump_manager/master/install_criterion.sh)" || echo "There has been an error while downloading criterion" 1>&2
 }
 
 launch() {
@@ -247,7 +251,8 @@ launch() {
     fi
 
     if [ "$CRITERION" == 1 ]; then
-        echo "Installing Criterion"
+        echo "Installing / Reinstalling Criterion"
+        criterion_installer
     fi
 
     if [ "$EPIMACS" == 1 ]; then
