@@ -11,6 +11,11 @@ if [[ "xFedora release 32 (Thirty Two)" != "x$(cat /etc/fedora-release)" ]]; the
     exit 1
 fi
 
+if [ ! -f "/etc/epidump_manager/.git" ]; then
+    cp -r ../epidump_manager/ /etc/
+fi
+
+cd /etc/epidump_manager
 install epidump_manager.sh /usr/bin/epidump_manager
 cp epidump_manager.8.gz /usr/share/\man/man8
 

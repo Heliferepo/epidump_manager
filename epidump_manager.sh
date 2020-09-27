@@ -19,6 +19,7 @@ show_help() {
     echo -e "\tOptional (not invoked by -a) : "
     echo -e "\t\t-z\tInstall zsh with ohmyzsh"
     echo -e "\t\t-c\tInstall criterion"
+    echo -e "\t\t-u\tUpdate the script"
     echo -e "\t-h\tdisplay this help and exit"
 }
 
@@ -217,8 +218,33 @@ zsh_installer() {
     cp /usr/share/oh-my-zsh/zshrc $addtouser/.zshrc
 }
 
+# Implements -c
 criterion_installer() {
     sh -c "$(curl https://raw.githubusercontent.com/Heliferepo/epidump_manager/master/install_criterion.sh)" || echo "There has been an error while downloading criterion" 1>&2
+}
+
+# Implements -u
+launch_updater() {
+    echo "Verifying that epidump_manager exist and is a repo"
+
+    if [ -f "/etc/epidump_manager/.git" ]; then
+        echo "Found epidump_manager trying to pull repo"
+        cd /etc/epidump_manager
+        git pull
+        if [ $? -ne 0 ]; then
+            echo "Failed to pull repo aborting..."
+            exit 1
+        fi
+    else
+        echo "Did not found epidump_manager removing the folder in case it exists"
+        rm -rf /etc/epidump_manager
+        echo "Cloning the repo inside epidump_manager"
+        git clone https://github.com/Heliferepo/epidump_manager /etc/epidump_manager || echo "Failed to clone repo aborting..." && exit 1
+        cd /etc/epidump_manager
+    fi
+
+    install epidump_manager.sh /usr/bin/epidump_manager
+    echo "Installed the new version of epidump_manager sucessfully"
 }
 
 launch() {
@@ -260,7 +286,7 @@ launch() {
 }
 
 parse_argument() {
-    while getopts "asdbeczh" opt; do
+    while getopts "abcdehsuz" opt; do
         case "$opt" in
             a)
                 ALL=1
@@ -282,6 +308,10 @@ parse_argument() {
                 ;;
             z)
                 ZSHELL=1
+                ;;
+            u)
+                launch_updater
+                exit 0
                 ;;
             h)
                 show_help;

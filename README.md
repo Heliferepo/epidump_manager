@@ -13,6 +13,7 @@ This dump manager provides thoses commands :
                 -z      Install zsh with ohymzsh
                 -c      Install Criterion
         -h      display this help and exit
+        -u      Update the script and quit
 ```
 
 You are meant to use the command as follow :
