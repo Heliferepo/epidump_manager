@@ -5,11 +5,11 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
-echo "Checking for Fedora 32..."
-if [[ "xFedora release 32 (Thirty Two)" != "x$(cat /etc/fedora-release)" ]]; then   # Check if /etc/fedora-release contains the text stored in it in Fedora 32. The x is to avoid an initial `-` character in /etc/fedora-release being interpreted as an option to test.
-    echo "This script must be run onto Fedora 32"
-    exit 1
-fi
+#echo "Checking for Fedora 32..."
+#if [[ "xFedora release 32 (Thirty Two)" != "x$(cat /etc/fedora-release)" ]]; then   # Check if /etc/fedora-release contains the text stored in it in Fedora 32. The x is to avoid an initial `-` character in /etc/fedora-release being interpreted as an option to test.
+    #echo "This script must be run onto Fedora 32"
+    #exit 1
+#fi
 
 if [ ! -f "/etc/epidump_manager/.git" ]; then
     cp -r ../epidump_manager/ /etc/

@@ -227,7 +227,7 @@ criterion_installer() {
 launch_updater() {
     echo "Verifying that epidump_manager exist and is a repo"
 
-    if [ -f "/etc/epidump_manager/.git" ]; then
+    if [ -d "/etc/epidump_manager/.git" ]; then
         echo "Found epidump_manager trying to pull repo"
         cd /etc/epidump_manager
         git pull
