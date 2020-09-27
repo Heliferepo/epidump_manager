@@ -140,7 +140,7 @@ dependencies_installer() {
     fi
 
     echo "Installing packages from Epitech dump package list..."
-    dnf -y install $packages criterion criterion-devel
+    dnf -y install $packages
 }
 
 # Implements -s
