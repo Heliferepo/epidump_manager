@@ -102,6 +102,25 @@ enabling_rpm_fusion() {
     fi
 }
 
+install_gradle() {
+    echo "Downloading gradle zip"
+    wget https://downloads.gradle-dn.com/distributions/gradle-6.6.1-bin.zip
+
+    if [ ! -f "gradle-6.6.1-bin.zip" ]; then
+        echo "Could not download gradle... Please report this to repository owner and check your internet connection"
+        return
+    fi
+
+    echo "Preparing folder /opt/gradle to install it"
+    mkdir /opt/gradle
+    echo "Unzipping gradle into /opt/gradle"
+    unzip -d /opt/gradle gradle-6.6.1-bin.zip
+    echo "Removing zip folder"
+    rm -f gradle-6.6.1-bin.zip
+    echo "Gradle has been sucessfully installed"
+
+}
+
 # Implements -a
 rebuild_all() {
     check_for_git
@@ -140,6 +159,9 @@ dependencies_installer() {
     fi
 
     echo "Installing packages from Epitech dump package list..."
+
+    install_gradle
+
     dnf -y install $packages
 }
 
@@ -182,7 +204,7 @@ reinstall_epitech_emacs() {
     # Checkout latest stable commit (ugly hack but it works at least)
     git checkout 278bb6a630e6474f99028a8ee1a5c763e943d9a3
 
-    echo "Running Epitech emacs install script..."
+    echo "Running Epitech emacs install script... into system wide"
     ./INSTALL.sh system
 
     cd .. && rm -rf epitech-emacs
