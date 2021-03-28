@@ -5,7 +5,6 @@ SFML=0
 DEPS=0
 BLIH=0
 EPIMACS=0
-ZSHELL=0
 CRITERION=0
 addtouser=""
 
@@ -17,7 +16,6 @@ show_help() {
     echo -e "\t-b\treinstall blih with Epitech's script"
     echo -e "\t-e\tinstall Emacs with dnf and Epitech Emacs (SYSTEM Install) with Epitech's script"
     echo -e "\tOptional (not invoked by -a) : "
-    echo -e "\t\t-z\tInstall zsh with ohmyzsh"
     echo -e "\t\t-c\tInstall criterion"
     echo -e "\t\t-u\tUpdate the script"
     echo -e "\t-h\tdisplay this help and exit"
@@ -53,10 +51,6 @@ check_for_SFML() {
 
 check_for_curl() {
     check_for_file_and_install_package_if_not_present "Curl" /usr/bin/curl curl
-}
-
-check_for_zsh() {
-    check_for_file_and_install_package_if_not_present "Z shell" /usr/bin/zsh zsh
 }
 
 check_for_wget() {
@@ -275,12 +269,6 @@ launch() {
         rebuild_all
         exit 0
     fi
-
-    if [ "$ZSHELL" == 1 ]; then
-        echo "Installing / Reinstalling zsh"
-        zsh_installer
-    fi
-
     if [ "$SFML" == 1 ]; then
         echo "Rebuilding / Installing SFML + CSFML"
         rebuild_sfml_plus_csfml
@@ -328,9 +316,7 @@ parse_argument() {
             c)
                 CRITERION=1
                 ;;
-            z)
-                ZSHELL=1
-                ;;
+
             u)
                 launch_updater
                 exit 0
