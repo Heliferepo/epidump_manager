@@ -65,21 +65,6 @@ check_for_emacs() {
     check_for_file_and_install_package_if_not_present "GNU Emacs without X support" /usr/bin/emacs-nox emacs-nox
 }
 
-get_user_install_zsh() {
-    echo "Please give the username of the user you want to install to : "
-    read addtouser
-
-    if [ "$addtouser" == "root" ]; then
-        addtouser = "/root"
-    elif [ -d "/home/$addtouser" ]; then
-        addtouser = "/home/$addtouser"
-    else
-        echo "Could not find /home/$addtouser"
-        exit 1
-    fi
-}
-
-
 check_for_basic_invocation_errors() {
     if [[ $EUID -ne 0 ]]; then
         echo "This script must be run as root" 1>&2
@@ -202,36 +187,6 @@ reinstall_epitech_emacs() {
     ./INSTALL.sh system
 
     cd .. && rm -rf epitech-emacs
-}
-
-#Implements -z
-zsh_installer() {
-    get_user_install_zsh
-    check_for_zsh
-    check_for_wget
-    check_for_chsh
-
-    echo "Download ohmyzsh + installation"
-    sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)" || echo "There has been an error while downloading ohmyzsh" 1>&2
-
-    echo "Copy zsh files to /usr/share for all user access"
-    mv /root/.oh-my-zsh /usr/share/oh-my-zsh
-
-    echo "Move into the dir and copy the zshrc template to zshrc (which will be the default for users)"
-    cd /usr/share/oh-my-zsh/
-    cp templates/zshrc.zsh-template zshrc
-
-    echo "Nab the patch file from MarcinWieczorek's AUR Package and apply to the zshrc file"
-    wget https://aur.archlinux.org/cgit/aur.git/plain/0001-zshrc.patch\?h\=oh-my-zsh-git -O zshrc.patch && patch -p1 < zshrc.patch
-
-    echo "Create hard link to the zshrc file so it creates an actual independent copy on new users"
-    sudo ln /usr/share/oh-my-zsh/zshrc /etc/skel/.zshrc
-
-    echo "Set default shell to zsh"
-    sudo adduser -D -s /bin/zsh
-
-    echo "Giving a zshrc to specific user"
-    cp /usr/share/oh-my-zsh/zshrc $addtouser/.zshrc
 }
 
 # Implements -c
