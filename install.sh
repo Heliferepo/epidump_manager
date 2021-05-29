@@ -1,3 +1,9 @@
+#!/bin/bash
+# File              : install.sh
+# Author            : Mattis DALLEAU <mattisdalleau@gmail.com>
+# Date              : 29.05.2021
+# Last Modified Date: 29.05.2021
+# Last Modified By  : Mattis DALLEAU <mattisdalleau@gmail.com>
 #!/usr/bin/env bash
 
 if [[ $EUID -ne 0 ]]; then
@@ -11,11 +17,10 @@ if [[ $1 == "clean" ]]; then
     exit 0
 fi
 
-#echo "Checking for Fedora 32..."
-#if [[ "xFedora release 32 (Thirty Two)" != "x$(cat /etc/fedora-release)" ]]; then   # Check if /etc/fedora-release contains the text stored in it in Fedora 32. The x is to avoid an initial `-` character in /etc/fedora-release being interpreted as an option to test.
-    #echo "This script must be run onto Fedora 32"
-    #exit 1
-#fi
+echo "Checking for Fedora 32..."
+if [[ "xFedora release 32 (Thirty Two)" != "x$(cat /etc/fedora-release)" ]]; then   # Check if /etc/fedora-release contains the text stored in it in Fedora 32. The x is to avoid an initial `-` character in /etc/fedora-release being interpreted as an option to test.
+    echo "WARNING: This script should be runned on Fedora 32"
+fi
 
 if [ ! -f "/etc/epidump_manager/.git" ]; then
     cp -r ../epidump_manager/ /etc/

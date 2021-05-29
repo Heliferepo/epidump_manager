@@ -1,3 +1,9 @@
+#!/bin/bash
+# File              : install_criterion.sh
+# Author            : Mattis DALLEAU <mattisdalleau@gmail.com>
+# Date              : 29.05.2021
+# Last Modified Date: 29.05.2021
+# Last Modified By  : Mattis DALLEAU <mattisdalleau@gmail.com>
 #!/usr/bin/env bash
 URL="https://github.com/Snaipe/Criterion/releases/download/v2.3.2"
 TARBALL="criterion-v2.3.2-linux-x86_64.tar.bz2"
@@ -16,15 +22,16 @@ rm -fr $DIR
 
 wget $URL/$TARBALL
 if [ $? != 0 ]; then
-    echo "failled, exiting" 1>&2
-    exit 1
+    echo "failled, exiting"
+    exit;
 fi
 
-echo -e "\nUntaring $TARBALL"
+echo
+echo "untaring $TARBALL"
 tar xjf $TARBALL
 if [ $? != 0 ]; then
-    echo "failled, exiting" 1>&2
-    exit 1
+    echo "failled, exiting"
+    exit;
 fi
 
 echo "creating custom ld.conf"
